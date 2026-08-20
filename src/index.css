@@ -1,0 +1,29 @@
+@import "tailwindcss";
+@import "./styles/tokens.css";
+
+@theme inline {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --color-ext-bg: var(--ext-bg);
+  --color-ext-surface: var(--ext-surface);
+  --color-ext-text: var(--ext-text);
+  --color-ext-muted: var(--ext-muted);
+  --color-ext-accent: var(--ext-accent);
+  --color-ext-warning: var(--ext-warning);
+  --color-ext-danger: var(--ext-danger);
+  --color-ext-success: var(--ext-success);
+  --color-ext-border: var(--ext-border);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--ext-bg);
+  color: var(--ext-text);
+  -webkit-font-smoothing: antialiased;
+}

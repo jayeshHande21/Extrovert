@@ -1,0 +1,13 @@
+:root {
+  --ext-bg: #0b0614;
+  --ext-surface: #161022;
+  --ext-text: #f6f1ea;
+  --ext-muted: #b8aeb0;
+  --ext-accent: #ff4d8d;
+  --ext-warning: #ffb020;
+  --ext-danger: #ff5c7a;
+  --ext-success: #3dd68c;
+  --ext-border: #2a2238;
+  --ext-radius-md: 12px;
+  --ext-radius-lg: 20px;
+}
