@@ -3,6 +3,7 @@
 
 @theme inline {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
   --color-ext-bg: var(--ext-bg);
   --color-ext-surface: var(--ext-surface);
   --color-ext-text: var(--ext-text);
@@ -26,4 +27,24 @@ body {
   background: var(--ext-bg);
   color: var(--ext-text);
   -webkit-font-smoothing: antialiased;
+}
+
+.landing-mesh {
+  background:
+    radial-gradient(ellipse 70% 45% at 18% 12%, #ff4d2a 0%, transparent 58%),
+    radial-gradient(ellipse 55% 40% at 88% 8%, #1fd0e6 0%, transparent 52%),
+    radial-gradient(ellipse 50% 35% at 52% 18%, #ffc43a 0%, transparent 48%),
+    radial-gradient(ellipse 80% 50% at 42% 38%, #1a4a7a 0%, transparent 62%),
+    linear-gradient(180deg, #2f7a8c 0%, #000 72%);
+}
+
+@media (min-width: 1024px) {
+  .landing-mesh {
+    background:
+      radial-gradient(ellipse 55% 70% at 18% 30%, #ff4d2a 0%, transparent 58%),
+      radial-gradient(ellipse 40% 50% at 48% 12%, #1fd0e6 0%, transparent 52%),
+      radial-gradient(ellipse 35% 40% at 32% 18%, #ffc43a 0%, transparent 48%),
+      radial-gradient(ellipse 60% 65% at 28% 55%, #1a4a7a 0%, transparent 62%),
+      linear-gradient(90deg, #2f7a8c 0%, #000 68%);
+  }
 }

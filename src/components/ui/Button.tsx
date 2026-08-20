@@ -18,9 +18,9 @@ export function Button({
   return (
     <button
       className={cn(
-        'inline-flex h-12 w-full items-center justify-center rounded-[12px] px-4 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-60',
-        variant === 'primary' && 'bg-ext-accent text-white',
-        variant === 'ghost' && 'border border-ext-border bg-transparent text-ext-text',
+        'inline-flex h-14 w-full items-center justify-center rounded-[12px] px-4 text-sm font-bold tracking-wide uppercase transition disabled:cursor-not-allowed disabled:opacity-60',
+        variant === 'primary' && 'bg-white text-black',
+        variant === 'ghost' && 'border border-white bg-transparent text-white',
         className,
       )}
       disabled={disabled || loading}
