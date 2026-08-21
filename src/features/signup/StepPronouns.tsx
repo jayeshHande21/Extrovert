@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
-import { GettingReadyHeader } from '@/components/signup/GettingReadyHeader'
 import { PronounsSheet } from '@/components/signup/PronounsSheet'
+import {
+  Accent,
+  StepActions,
+  StepHeading,
+  StepHint,
+} from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { useWizardStore } from '@/store/wizardStore'
@@ -26,33 +31,42 @@ export function StepPronouns() {
     }
   }, [otpVerified, age, setStep])
 
+  const openSheet = () => setSheetOpen(true)
+
   return (
-    <main className="min-h-dvh bg-black">
-      <div className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 py-8 sm:px-8 sm:py-10">
-        <GettingReadyHeader />
-
-        <h1 className="mt-10 text-[28px] leading-8 font-bold text-white sm:mt-14 sm:text-4xl sm:leading-10">
-          Which pronouns feel right for you?
-        </h1>
-
-        <div className="mt-8">
-          <div className="cursor-pointer" onClick={() => setSheetOpen(true)}>
-            <TextField label="Pronouns" readOnly tabIndex={-1} value={pronouns} />
-          </div>
-          <p className="mt-3 text-sm text-white">
-            Select the pronouns that feel right for you.
-          </p>
-        </div>
-
-        <div className="mt-auto flex max-w-md flex-col gap-3 pt-10">
-          <Button disabled={!pronouns} onClick={goNext}>
-            Next
-          </Button>
-          <Button onClick={goBack} variant="ghost">
-            Back
-          </Button>
-        </div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <StepHeading>
+        Which pronouns feel right <Accent>for you</Accent>?
+      </StepHeading>
+      <div
+        className="cursor-pointer"
+        onClick={openSheet}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            openSheet()
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        <TextField
+          className="cursor-pointer"
+          label="Pronouns"
+          readOnly
+          tabIndex={-1}
+          value={pronouns}
+        />
       </div>
+      <StepHint>Select the pronouns that feel right for you.</StepHint>
+      <StepActions>
+        <Button disabled={!pronouns} onClick={goNext}>
+          Next
+        </Button>
+        <Button onClick={goBack} variant="ghost">
+          Back
+        </Button>
+      </StepActions>
 
       <PronounsSheet
         initialValue={pronouns}
@@ -63,6 +77,6 @@ export function StepPronouns() {
           setSheetOpen(false)
         }}
       />
-    </main>
+    </div>
   )
 }

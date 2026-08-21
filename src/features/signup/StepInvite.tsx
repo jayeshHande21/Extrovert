@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { GettingReadyHeader } from '@/components/signup/GettingReadyHeader'
+import { StepActions, StepHint } from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { inviteLines } from '@/data/inviteCopy'
@@ -19,6 +20,7 @@ export function StepInvite() {
   const setFields = useWizardStore((state) => state.setFields)
   const setStep = useWizardStore((state) => state.setStep)
   const navigate = useNavigate()
+  const reduceMotion = useReducedMotion()
   const [submitting, setSubmitting] = useState(false)
 
   const {
@@ -74,48 +76,43 @@ export function StepInvite() {
   })
 
   return (
-    <main className="min-h-dvh bg-black">
-      <form
-        className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 py-8 sm:px-8 sm:py-10"
-        noValidate
-        onSubmit={onSubmit}
-      >
-        <GettingReadyHeader />
-
-        <div className="mt-10 space-y-2 text-[22px] leading-7 font-bold tracking-wide text-white uppercase sm:mt-14 sm:text-3xl sm:leading-9">
-          {inviteLines.map(([before, accent, after]) => (
-            <p key={accent}>
-              {before}
-              <span className="text-ext-accent">{accent}</span>
-              {after}
-            </p>
-          ))}
-        </div>
-
-        <div className="mt-8">
-          <TextField
-            autoCapitalize="characters"
-            autoComplete="off"
-            error={errors.inviteCode?.message}
-            maxLength={12}
-            spellCheck={false}
-            {...register('inviteCode')}
-            label="Enter invite code (optional)"
-          />
-          <p className="mt-3 text-sm text-ext-muted">
-            Enter invite code and get up to +30 HVTs!
-          </p>
-        </div>
-
-        <div className="mt-auto flex max-w-md flex-col gap-3 pt-10">
-          <Button loading={submitting} type="submit">
-            Sign up
-          </Button>
-          <Button disabled={submitting} onClick={goBack} type="button" variant="ghost">
-            Back
-          </Button>
-        </div>
-      </form>
-    </main>
+    <form className="flex min-h-0 flex-1 flex-col" noValidate onSubmit={onSubmit}>
+      <div className="mb-7 flex flex-col gap-1">
+        {inviteLines.map(([before, accent, after], index) => (
+          <motion.p
+            animate={{ opacity: 1, y: 0 }}
+            className="text-[22px] leading-[1.28] font-bold uppercase sm:text-[26px]"
+            initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+            key={accent}
+            transition={{
+              delay: reduceMotion ? 0 : 0.05 + index * 0.1,
+              duration: 0.5,
+            }}
+          >
+            {before}
+            <span className="text-ext-accent">{accent}</span>
+            {after}
+          </motion.p>
+        ))}
+      </div>
+      <TextField
+        autoCapitalize="characters"
+        autoComplete="off"
+        error={errors.inviteCode?.message}
+        label="Invite code (optional)"
+        maxLength={12}
+        spellCheck={false}
+        {...register('inviteCode')}
+      />
+      <StepHint>Enter invite code and get up to +30 HVTs!</StepHint>
+      <StepActions>
+        <Button loading={submitting} type="submit">
+          Sign Up
+        </Button>
+        <Button disabled={submitting} onClick={goBack} type="button" variant="ghost">
+          Back
+        </Button>
+      </StepActions>
+    </form>
   )
 }

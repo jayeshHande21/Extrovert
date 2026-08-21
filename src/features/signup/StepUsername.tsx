@@ -1,7 +1,12 @@
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { GettingReadyHeader } from '@/components/signup/GettingReadyHeader'
+import {
+  Accent,
+  StepActions,
+  StepHeading,
+  StepHint,
+} from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { usernameSchema, type UsernameValues } from '@/lib/schemas'
@@ -40,43 +45,31 @@ export function StepUsername() {
   })
 
   return (
-    <main className="min-h-dvh bg-black">
-      <form
-        className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 py-8 sm:px-8 sm:py-10"
-        noValidate
-        onSubmit={onSubmit}
-      >
-        <GettingReadyHeader />
-
-        <h1 className="mt-10 text-[28px] leading-8 font-bold text-white sm:mt-14 sm:text-4xl sm:leading-10">
-          Create a username that fits your vibe!
-        </h1>
-
-        <div className="mt-8">
-          <TextField
-            autoCapitalize="none"
-            autoComplete="username"
-            error={errors.username?.message}
-            maxLength={20}
-            spellCheck={false}
-            {...register('username')}
-            label="Username"
-          />
-          <p className="mt-3 text-sm text-white">
-            All your Superlatives and Invites will come your way with this name,
-            so make it unforgettable!
-          </p>
-        </div>
-
-        <div className="mt-auto flex max-w-md flex-col gap-3 pt-10">
-          <Button disabled={!isValid || !currentValue} type="submit">
-            Next
-          </Button>
-          <Button onClick={goBack} type="button" variant="ghost">
-            Back
-          </Button>
-        </div>
-      </form>
-    </main>
+    <form className="flex min-h-0 flex-1 flex-col" noValidate onSubmit={onSubmit}>
+      <StepHeading>
+        Create a username that fits your <Accent>vibe</Accent>!
+      </StepHeading>
+      <TextField
+        autoCapitalize="none"
+        autoComplete="username"
+        error={errors.username?.message}
+        label="Username"
+        maxLength={20}
+        spellCheck={false}
+        {...register('username')}
+      />
+      <StepHint>
+        All your superlatives and invites will come your way with this name —
+        make it unforgettable.
+      </StepHint>
+      <StepActions>
+        <Button disabled={!isValid || !currentValue} type="submit">
+          Next
+        </Button>
+        <Button onClick={goBack} type="button" variant="ghost">
+          Back
+        </Button>
+      </StepActions>
+    </form>
   )
 }

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type RefObject } from 'react'
+import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -26,9 +27,13 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
   const yearRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (open) {
-      setParts(parseDob(initialValue))
+    if (!open) {
+      return
     }
+
+    setParts(parseDob(initialValue))
+    const timer = window.setTimeout(() => dayRef.current?.focus(), 40)
+    return () => window.clearTimeout(timer)
   }, [open, initialValue])
 
   useEffect(() => {
@@ -78,13 +83,13 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
       ? true
       : parts.year.length === 4 && Boolean(error)
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
           <motion.button
             aria-label="Close date of birth"
-            className="absolute inset-0 bg-black/70"
+            className="absolute inset-0 bg-[#0a0a0a]/70 backdrop-blur-[2px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -92,37 +97,38 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
             type="button"
           />
           <motion.section
+            aria-describedby="dob-sub"
             aria-labelledby="dob-title"
             aria-modal="true"
-            className="relative w-full max-w-xl rounded-t-3xl bg-[#111] px-5 pt-3 pb-5 sm:rounded-3xl sm:px-8 sm:pt-6"
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 40, opacity: 0 }}
+            className="relative w-full max-w-[520px] rounded-2xl border border-ext-border bg-ext-surface p-5 sm:p-8"
+            initial={{ opacity: 0, scale: 0.92, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 10 }}
             role="dialog"
-            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+            transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/30 sm:hidden" />
-            <header className="mb-6 flex items-start justify-between gap-4">
-              <h2
-                className="text-xl font-bold tracking-wide text-white uppercase"
-                id="dob-title"
-              >
+            <header className="mb-1.5 flex items-center justify-between gap-4">
+              <h2 className="text-xl font-bold text-ext-text" id="dob-title">
                 Date of birth
               </h2>
               <button
                 aria-label="Close"
-                className="rounded-full p-1 text-white"
+                className="rounded-full p-1 text-ext-muted transition-colors hover:text-ext-text"
                 onClick={onClose}
                 type="button"
               >
                 <X className="size-5" />
               </button>
             </header>
+            <p className="mb-6 text-[13px] text-ext-muted" id="dob-sub">
+              We&apos;ll use this to calculate your age.
+            </p>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-[minmax(4.75rem,1fr)_minmax(4.75rem,1fr)_minmax(6.5rem,1.5fr)] gap-2 sm:gap-3">
               <DobField
                 invalid={dayInvalid}
                 inputRef={dayRef}
+                label="Day"
                 maxLength={2}
                 onChange={(value) => update('day', value, 2)}
                 placeholder="DD"
@@ -131,6 +137,7 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
               <DobField
                 invalid={monthInvalid}
                 inputRef={monthRef}
+                label="Month"
                 maxLength={2}
                 onChange={(value) => update('month', value, 2)}
                 placeholder="MM"
@@ -139,6 +146,7 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
               <DobField
                 invalid={yearInvalid}
                 inputRef={yearRef}
+                label="Year"
                 maxLength={4}
                 onChange={(value) => update('year', value, 4)}
                 placeholder="YYYY"
@@ -147,7 +155,9 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
             </div>
 
             {error ? (
-              <p className="mt-3 text-sm text-ext-danger">{error}</p>
+              <p className="mt-3 text-sm text-ext-danger" role="alert">
+                {error}
+              </p>
             ) : null}
 
             <Button
@@ -160,12 +170,14 @@ export function DobSheet({ open, initialValue, onClose, onConfirm }: DobSheetPro
           </motion.section>
         </div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }
 
 type DobFieldProps = {
   value: string
+  label: string
   placeholder: string
   maxLength: number
   invalid: boolean
@@ -175,6 +187,7 @@ type DobFieldProps = {
 
 function DobField({
   value,
+  label,
   placeholder,
   maxLength,
   invalid,
@@ -182,17 +195,23 @@ function DobField({
   inputRef,
 }: DobFieldProps) {
   return (
-    <input
-      className={cn(
-        'h-14 rounded-[10px] border border-ext-border bg-black text-center text-white outline-none placeholder:text-ext-muted focus:border-white',
-        invalid && 'border-ext-danger',
-      )}
-      inputMode="numeric"
-      maxLength={maxLength}
-      onChange={(event) => onChange(event.target.value)}
-      placeholder={placeholder}
-      ref={inputRef}
-      value={value}
-    />
+    <label className="block min-w-0">
+      <span className="mb-2 block font-mono text-[10px] tracking-[0.12em] text-ext-muted uppercase">
+        {label}
+      </span>
+      <input
+        aria-label={label}
+        className={cn(
+          'h-16 w-full rounded-[10px] border border-white/25 bg-black/40 px-1 text-center font-mono text-xl text-ext-text outline-none placeholder:text-ext-muted focus:border-ext-accent sm:px-2 sm:text-2xl',
+          invalid && 'border-ext-danger',
+        )}
+        inputMode="numeric"
+        maxLength={maxLength}
+        onChange={(event) => onChange(event.target.value)}
+        placeholder={placeholder}
+        ref={inputRef}
+        value={value}
+      />
+    </label>
   )
 }

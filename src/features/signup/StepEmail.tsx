@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { Logo } from '@/components/brand/Logo'
+import { Accent, StepActions, StepHeading } from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
+import { cn } from '@/lib/cn'
 import { sendOtp } from '@/lib/mockApi'
 import { emailSchema, type EmailValues } from '@/lib/schemas'
 import { useWizardStore } from '@/store/wizardStore'
@@ -53,39 +54,54 @@ export function StepEmail() {
   })
 
   return (
-    <main className="min-h-dvh bg-black">
-      <form
-        className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 py-8 sm:px-8 sm:py-10"
-        noValidate
-        onSubmit={onSubmit}
+    <form className="flex min-h-0 flex-1 flex-col" noValidate onSubmit={onSubmit}>
+      <StepHeading>
+        Enter your <Accent>email</Accent>
+      </StepHeading>
+      <TextField
+        autoComplete="email"
+        error={errors.email?.message}
+        inputMode="email"
+        label="Email"
+        type="email"
+        {...register('email')}
+      />
+      <button
+        aria-pressed={newsletter}
+        className="mt-[22px] flex items-center gap-3 text-left text-sm text-ext-text select-none"
+        onClick={() => setNewsletter((value) => !value)}
+        type="button"
       >
-        <Logo size="sm" />
-        <h1 className="mt-10 text-[28px] font-bold text-white sm:mt-14 sm:text-4xl">
-          Enter your email
-        </h1>
-        <div className="mt-8">
-          <TextField
-            autoComplete="email"
-            error={errors.email?.message}
-            inputMode="email"
-            placeholder="Email"
-            type="email"
-            {...register('email')}
-          />
-        </div>
-        <Button className="mt-5 max-w-md" loading={submitting} type="submit">
+        <span
+          className={cn(
+            'flex size-5 items-center justify-center rounded-[5px] border-[1.5px] border-ext-border transition-colors',
+            newsletter && 'border-ext-accent bg-ext-accent',
+          )}
+        >
+          <svg
+            aria-hidden
+            className={cn(
+              'size-3 transition-all duration-150',
+              newsletter ? 'scale-100 opacity-100' : 'scale-50 opacity-0',
+            )}
+            fill="none"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M4 12l6 6L20 6"
+              stroke="#0a0a0a"
+              strokeLinecap="round"
+              strokeWidth="3"
+            />
+          </svg>
+        </span>
+        I&apos;d like to subscribe to your newsletter
+      </button>
+      <StepActions>
+        <Button loading={submitting} type="submit">
           Proceed
         </Button>
-        <label className="mt-5 flex items-center gap-3 text-sm text-white">
-          <input
-            checked={newsletter}
-            className="size-4 rounded border border-white/70 bg-black accent-white"
-            onChange={(event) => setNewsletter(event.target.checked)}
-            type="checkbox"
-          />
-          I&apos;d like to subscribe to your newsletter
-        </label>
-      </form>
-    </main>
+      </StepActions>
+    </form>
   )
 }

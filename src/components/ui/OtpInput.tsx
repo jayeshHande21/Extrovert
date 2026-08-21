@@ -24,7 +24,7 @@ export function OtpInput({ value, onChange, disabled }: OtpInputProps) {
               className="flex w-9 flex-col items-center sm:w-11"
               key={index}
             >
-              <span className="flex h-11 items-end justify-center font-serif text-3xl text-white">
+              <span className="flex h-11 items-end justify-center font-serif text-3xl text-ext-text">
                 {slot.char ?? (slot.hasFakeCaret ? '' : '')}
                 {slot.hasFakeCaret ? (
                   <span className="mb-1 ml-0.5 inline-block h-6 w-px animate-pulse bg-white" />

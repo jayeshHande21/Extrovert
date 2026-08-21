@@ -10,9 +10,10 @@ const sizes = {
 type LogoProps = {
   size?: keyof typeof sizes
   className?: string
+  pulse?: boolean
 }
 
-export function Logo({ size = 'md', className }: LogoProps) {
+export function Logo({ size = 'md', className, pulse = false }: LogoProps) {
   const [bouncing, setBouncing] = useState(false)
 
   const bounce = () => {
@@ -30,11 +31,12 @@ export function Logo({ size = 'md', className }: LogoProps) {
   return (
     <button
       aria-label="Extroverts"
-      className={cn(
-        'relative inline-block cursor-pointer bg-transparent p-0 font-serif font-bold leading-none text-white',
-        sizes[size],
-        className,
-      )}
+        className={cn(
+          'relative inline-block cursor-pointer bg-transparent p-0 font-serif font-bold leading-none text-ext-text',
+          pulse && 'font-editorial',
+          sizes[size],
+          className,
+        )}
       onClick={bounce}
       onMouseEnter={bounce}
       type="button"
@@ -42,8 +44,9 @@ export function Logo({ size = 'md', className }: LogoProps) {
       E
       <span
         className={cn(
-          'logo-dot absolute top-[0.18em] -right-[0.22em] size-[0.18em] rounded-full bg-white',
-          bouncing && 'logo-dot-active',
+          'logo-dot absolute top-[0.18em] -right-[0.22em] size-[0.18em] rounded-full',
+          pulse ? 'bg-ext-accent' : 'bg-white',
+          bouncing ? 'logo-dot-active' : pulse && 'logo-dot-pulse',
         )}
         onAnimationEnd={() => setBouncing(false)}
       />

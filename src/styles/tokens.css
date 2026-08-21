@@ -1,13 +1,14 @@
 :root {
-  --ext-bg: #000000;
-  --ext-surface: #121212;
-  --ext-text: #ffffff;
-  --ext-muted: #9a9a9a;
-  --ext-accent: #9b4dff;
+  --ext-bg: #0a0a0a;
+  --ext-surface: #111111;
+  --ext-text: #f5f3ef;
+  --ext-muted: #75726c;
+  --ext-accent: #a78bfa;
+  --ext-accent-dim: rgba(167, 139, 250, 0.14);
   --ext-warning: #f29aa8;
   --ext-danger: #ff3b30;
   --ext-success: #3dd68c;
-  --ext-border: #3a3a3a;
+  --ext-border: rgba(245, 243, 239, 0.16);
   --ext-radius-md: 12px;
   --ext-radius-lg: 16px;
 }

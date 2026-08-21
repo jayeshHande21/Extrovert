@@ -1,3 +1,4 @@
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { StepAge } from '@/features/signup/StepAge'
 import { StepEmail } from '@/features/signup/StepEmail'
 import { StepInvite } from '@/features/signup/StepInvite'
@@ -5,11 +6,10 @@ import { StepName } from '@/features/signup/StepName'
 import { StepOtp } from '@/features/signup/StepOtp'
 import { StepPronouns } from '@/features/signup/StepPronouns'
 import { StepUsername } from '@/features/signup/StepUsername'
+import { SignupShell } from '@/components/signup/SignupShell'
 import { useWizardStore } from '@/store/wizardStore'
 
-export function SignupWizard() {
-  const step = useWizardStore((state) => state.step)
-
+function StepView({ step }: { step: number }) {
   if (step === 1) {
     return <StepEmail />
   }
@@ -35,4 +35,26 @@ export function SignupWizard() {
   }
 
   return <StepInvite />
+}
+
+export function SignupWizard() {
+  const step = useWizardStore((state) => state.step)
+  const reduceMotion = useReducedMotion()
+
+  return (
+    <SignupShell>
+      <AnimatePresence mode="wait">
+        <motion.div
+          animate={{ opacity: 1, x: 0 }}
+          className="flex min-h-0 flex-1 flex-col"
+          exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -28 }}
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 28 }}
+          key={step}
+          transition={{ duration: reduceMotion ? 0.16 : 0.38, ease: [0.22, 0.61, 0.36, 1] }}
+        >
+          <StepView step={step} />
+        </motion.div>
+      </AnimatePresence>
+    </SignupShell>
+  )
 }

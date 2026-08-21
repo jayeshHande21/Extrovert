@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "./styles/tokens.css";
 
+@theme {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-editorial: "Fraunces", "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
 @theme inline {
   --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
   --font-serif: "Playfair Display", ui-serif, Georgia, serif;
@@ -62,8 +68,25 @@ body {
   animation: logo-dot-bounce 0.7s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
+@keyframes logo-dot-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+
+.logo-dot-pulse {
+  animation: logo-dot-pulse 2.2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .logo-dot-active {
+  .logo-dot-active,
+  .logo-dot-pulse {
     animation: none;
   }
 }

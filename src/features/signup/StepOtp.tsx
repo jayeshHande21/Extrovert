@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Info } from 'lucide-react'
 import { toast } from 'sonner'
-import { Logo } from '@/components/brand/Logo'
+import { Accent, StepActions, StepHeading } from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { OtpInput } from '@/components/ui/OtpInput'
 import { sendOtp, verifyOtp } from '@/lib/mockApi'
@@ -92,44 +92,33 @@ export function StepOtp() {
   }
 
   return (
-    <main className="min-h-dvh bg-black">
-      <div className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 py-8 sm:px-8 sm:py-10">
-        <div className="flex justify-center">
-          <Logo size="sm" />
-        </div>
-
-        <h1 className="mt-10 text-lg font-semibold tracking-wide text-white uppercase sm:mt-14">
-          Enter OTP
-        </h1>
-
-        <div className="mt-6">
-          <OtpInput disabled={submitting} onChange={setOtp} value={otp} />
-          <div className="mt-2 flex justify-end">
-            <button
-              className="text-xs text-ext-muted disabled:opacity-50"
-              disabled={cooldown > 0 || resending}
-              onClick={onResend}
-              type="button"
-            >
-              {cooldown > 0 ? `Resend OTP in ${cooldown}s` : 'Resend OTP'}
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-8 flex max-w-md flex-col gap-3">
-          <Button loading={submitting} onClick={onVerify}>
-            Verify
-          </Button>
-          <Button disabled={submitting} onClick={goBack} variant="ghost">
-            Go back
-          </Button>
-        </div>
-
-        <p className="mt-6 flex items-start gap-2 text-xs text-ext-muted">
-          <Info className="mt-0.5 size-3.5 shrink-0" />
-          <span>A 6-digit OTP has been sent to {email}.</span>
-        </p>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <StepHeading>
+        Enter your <Accent>OTP</Accent>
+      </StepHeading>
+      <OtpInput disabled={submitting} onChange={setOtp} value={otp} />
+      <div className="mt-2 flex justify-end">
+        <button
+          className="font-mono text-[11px] tracking-[0.08em] text-ext-muted uppercase disabled:opacity-50"
+          disabled={cooldown > 0 || resending}
+          onClick={onResend}
+          type="button"
+        >
+          {cooldown > 0 ? `Resend OTP in ${cooldown}s` : 'Resend OTP'}
+        </button>
       </div>
-    </main>
+      <p className="mt-6 flex items-start gap-2 text-xs text-ext-muted">
+        <Info className="mt-0.5 size-3.5 shrink-0" />
+        <span>A 6-digit OTP has been sent to {email}.</span>
+      </p>
+      <StepActions>
+        <Button loading={submitting} onClick={onVerify}>
+          Verify
+        </Button>
+        <Button disabled={submitting} onClick={goBack} variant="ghost">
+          Back
+        </Button>
+      </StepActions>
+    </div>
   )
 }

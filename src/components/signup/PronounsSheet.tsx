@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { toast } from 'sonner'
@@ -96,13 +97,13 @@ export function PronounsSheet({
     setCustomOpen(false)
   }
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-5">
           <motion.button
             aria-label="Close pronouns"
-            className="absolute inset-0 bg-black/70"
+            className="absolute inset-0 bg-[#0a0a0a]/70 backdrop-blur-[2px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -110,35 +111,32 @@ export function PronounsSheet({
             type="button"
           />
           <motion.section
+            aria-describedby="pronouns-sub"
             aria-labelledby="pronouns-title"
             aria-modal="true"
-            className="relative flex max-h-[88dvh] w-full max-w-xl flex-col rounded-t-3xl bg-[#111] px-5 pt-3 pb-5 sm:max-h-[80dvh] sm:rounded-3xl sm:px-8 sm:pt-6"
-            initial={{ y: 40, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 40, opacity: 0 }}
+            className="relative flex max-h-[80vh] w-full max-w-[480px] flex-col overflow-hidden rounded-2xl border border-ext-border bg-ext-surface p-6 sm:p-8"
+            initial={{ opacity: 0, scale: 0.92, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 10 }}
             role="dialog"
-            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
+            transition={{ duration: 0.32, ease: [0.22, 0.61, 0.36, 1] }}
           >
-            <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/30 sm:hidden" />
-            <header className="mb-4 flex items-start justify-between gap-4">
-              <div>
-                <h2
-                  className="text-xl font-bold tracking-wide text-white uppercase"
-                  id="pronouns-title"
-                >
-                  Select pronouns
-                </h2>
-                <p className="mt-1 text-sm text-white/80">Select upto 3</p>
-              </div>
+            <header className="mb-1.5 flex items-center justify-between gap-4">
+              <h2 className="text-xl font-bold text-ext-text" id="pronouns-title">
+                Select pronouns
+              </h2>
               <button
                 aria-label="Close"
-                className="rounded-full p-1 text-white"
+                className="rounded-full p-1 text-ext-muted transition-colors hover:text-ext-text"
                 onClick={onClose}
                 type="button"
               >
                 <X className="size-5" />
               </button>
             </header>
+            <p className="mb-6 text-[13px] text-ext-muted" id="pronouns-sub">
+              Select up to {MAX_PRONOUNS}.
+            </p>
 
             <div className="min-h-0 flex-1 overflow-y-auto pr-1">
               {pronounOptions.map((option) => {
@@ -146,17 +144,24 @@ export function PronounsSheet({
 
                 return (
                   <button
-                    className="flex w-full items-center gap-3 py-2.5 text-left text-white"
+                    className="flex w-full items-center gap-3.5 py-3 text-left text-base text-ext-text"
                     key={option}
                     onClick={() => toggle(option)}
                     type="button"
                   >
                     <span
                       className={cn(
-                        'size-5 rounded-full border border-white/70',
-                        isSelected && 'border-white bg-white',
+                        'relative size-5 shrink-0 rounded-full border-[1.5px] border-ext-border transition-colors',
+                        isSelected && 'border-ext-accent',
                       )}
-                    />
+                    >
+                      <span
+                        className={cn(
+                          'absolute inset-1 rounded-full bg-ext-accent transition-transform duration-150 ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                          isSelected ? 'scale-100' : 'scale-0',
+                        )}
+                      />
+                    </span>
                     {option}
                   </button>
                 )
@@ -167,7 +172,7 @@ export function PronounsSheet({
               <div className="mt-3 flex gap-2">
                 <input
                   autoFocus
-                  className="h-11 flex-1 rounded-[10px] border border-ext-border bg-black px-3 text-sm text-white outline-none"
+                  className="h-11 flex-1 rounded-[10px] border border-ext-border bg-transparent px-3 text-sm text-ext-text outline-none focus:border-ext-accent"
                   onChange={(event) => setCustomValue(event.target.value)}
                   onKeyDown={(event) => {
                     if (event.key === 'Enter') {
@@ -184,7 +189,7 @@ export function PronounsSheet({
               </div>
             ) : (
               <button
-                className="mt-3 text-left text-sm text-white underline underline-offset-2"
+                className="mt-3 text-left text-sm text-ext-text underline underline-offset-2"
                 onClick={() => setCustomOpen(true)}
                 type="button"
               >
@@ -193,7 +198,7 @@ export function PronounsSheet({
             )}
 
             <Button
-              className="mt-5"
+              className="mt-3.5"
               disabled={selected.length === 0}
               onClick={() => onConfirm(formatPronouns(selected))}
             >
@@ -202,6 +207,7 @@ export function PronounsSheet({
           </motion.section>
         </div>
       ) : null}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }

@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
-import { GettingReadyHeader } from '@/components/signup/GettingReadyHeader'
 import { DobSheet } from '@/components/signup/DobSheet'
+import {
+  Accent,
+  StepActions,
+  StepHeading,
+  StepHint,
+} from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { formatDob, getAge, type DobParts } from '@/lib/dateOfBirth'
@@ -36,34 +41,45 @@ export function StepAge() {
     setSheetOpen(false)
   }
 
+  const openSheet = () => setSheetOpen(true)
+
   return (
-    <main className="min-h-dvh bg-black">
-      <div className="mx-auto flex min-h-dvh w-full max-w-xl flex-col px-5 py-8 sm:px-8 sm:py-10">
-        <GettingReadyHeader />
-
-        <h1 className="mt-10 text-[28px] leading-8 font-bold text-white sm:mt-14 sm:text-4xl sm:leading-10">
-          How many years have you been partying?
-        </h1>
-
-        <div className="mt-8">
-          <div className="cursor-pointer" onClick={() => setSheetOpen(true)}>
-            <TextField label="Age" readOnly tabIndex={-1} value={age} />
-          </div>
-          <p className="mt-3 text-sm text-ext-muted">
-            We need your age to verify you&apos;re eligible and help others know
-            who they&apos;re connecting with.
-          </p>
-        </div>
-
-        <div className="mt-auto flex max-w-md flex-col gap-3 pt-10">
-          <Button disabled={!age} onClick={goNext}>
-            Next
-          </Button>
-          <Button onClick={goBack} variant="ghost">
-            Back
-          </Button>
-        </div>
+    <div className="flex min-h-0 flex-1 flex-col">
+      <StepHeading>
+        How many years have you been <Accent>partying</Accent>?
+      </StepHeading>
+      <div
+        className="cursor-pointer"
+        onClick={openSheet}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            openSheet()
+          }
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        <TextField
+          className="cursor-pointer"
+          label="Age"
+          readOnly
+          tabIndex={-1}
+          value={age}
+        />
       </div>
+      <StepHint>
+        We need your age to verify you&apos;re eligible and help others know who
+        they&apos;re connecting with.
+      </StepHint>
+      <StepActions>
+        <Button disabled={!age} onClick={goNext}>
+          Next
+        </Button>
+        <Button onClick={goBack} variant="ghost">
+          Back
+        </Button>
+      </StepActions>
 
       <DobSheet
         initialValue={dateOfBirth}
@@ -71,6 +87,6 @@ export function StepAge() {
         onClose={() => setSheetOpen(false)}
         onConfirm={onConfirm}
       />
-    </main>
+    </div>
   )
 }
