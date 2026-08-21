@@ -3,12 +3,12 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'sonner'
 import { StepActions, StepHint } from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { inviteLines } from '@/data/inviteCopy'
 import { completeProfile } from '@/lib/mockApi'
+import { notify } from '@/lib/notify'
 import { inviteSchema, type InviteValues } from '@/lib/schemas'
 import { useWizardStore } from '@/store/wizardStore'
 
@@ -57,19 +57,19 @@ export function StepInvite() {
       setFields({ inviteCode: values.inviteCode.trim().toUpperCase() })
 
       if (!result.ok) {
-        toast.error(result.message)
+        notify.error(result.message)
         return
       }
 
       if (result.bonusHvts) {
-        toast.success(`You're in. +${result.bonusHvts} HVTs unlocked.`)
+        notify.success(`You're in. +${result.bonusHvts} HVTs unlocked.`)
       } else {
-        toast.success("You're in. Profile complete.")
+        notify.success("You're in. Profile complete.")
       }
 
       navigate('/welcome')
     } catch {
-      toast.error('Something went wrong. Please try again.')
+      notify.error('Something went wrong. Please try again.')
     } finally {
       setSubmitting(false)
     }

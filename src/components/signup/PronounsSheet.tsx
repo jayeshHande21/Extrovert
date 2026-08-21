@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
-import { toast } from 'sonner'
+import { notify } from '@/lib/notify'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
 import {
@@ -66,7 +66,7 @@ export function PronounsSheet({
       }
 
       if (current.length >= MAX_PRONOUNS) {
-        toast.error(`Select up to ${MAX_PRONOUNS}`)
+        notify.error(`Select up to ${MAX_PRONOUNS}`)
         return current
       }
 
@@ -88,7 +88,7 @@ export function PronounsSheet({
     }
 
     if (selected.length >= MAX_PRONOUNS) {
-      toast.error(`Select up to ${MAX_PRONOUNS}`)
+      notify.error(`Select up to ${MAX_PRONOUNS}`)
       return
     }
 

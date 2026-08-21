@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { Accent, StepActions, StepHeading } from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { cn } from '@/lib/cn'
 import { sendOtp } from '@/lib/mockApi'
+import { notify } from '@/lib/notify'
 import { emailSchema, type EmailValues } from '@/lib/schemas'
 import { useWizardStore } from '@/store/wizardStore'
 
@@ -40,14 +40,16 @@ export function StepEmail() {
       setFields({ email: values.email })
 
       if (result.demoOtp) {
-        toast.message(`OTP sent. Use ${result.demoOtp} to continue.`)
+        notify.info('OTP sent. Use this code to continue.', {
+          code: result.demoOtp,
+        })
       } else {
-        toast.success('OTP sent to your email.')
+        notify.success('OTP sent to your email.')
       }
 
       goNext()
     } catch {
-      toast.error('Could not send OTP. Try again.')
+      notify.error('Could not send OTP. Try again.')
     } finally {
       setSubmitting(false)
     }

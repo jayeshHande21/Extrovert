@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import { Toaster } from 'sonner'
+import { AppToaster } from '@/components/ui/AppToaster'
 import { LandingPage } from '@/pages/LandingPage'
 import { SignupPage } from '@/pages/SignupPage'
 import { TermsPage } from '@/pages/TermsPage'
@@ -15,7 +15,7 @@ export default function App() {
         <Route path="/welcome" element={<WelcomePage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Toaster position="top-center" richColors />
+      <AppToaster />
     </BrowserRouter>
   )
 }

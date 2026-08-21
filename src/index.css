@@ -91,6 +91,53 @@ body {
   }
 }
 
+@keyframes toast-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  18% {
+    transform: translateX(-7px);
+  }
+  36% {
+    transform: translateX(6px);
+  }
+  54% {
+    transform: translateX(-4px);
+  }
+  72% {
+    transform: translateX(3px);
+  }
+}
+
+.toast-shake {
+  animation: toast-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+.otp-shake {
+  animation: toast-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+@keyframes toast-progress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.toast-progress {
+  animation: toast-progress linear forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast-shake,
+  .otp-shake {
+    animation: none;
+  }
+}
+
 @media (min-width: 1024px) {
   .landing-mesh {
     background:

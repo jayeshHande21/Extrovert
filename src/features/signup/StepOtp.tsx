@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Info } from 'lucide-react'
-import { toast } from 'sonner'
 import { Accent, StepActions, StepHeading } from '@/components/signup/SignupShell'
 import { Button } from '@/components/ui/Button'
 import { OtpInput } from '@/components/ui/OtpInput'
 import { sendOtp, verifyOtp } from '@/lib/mockApi'
+import { notify } from '@/lib/notify'
 import { useWizardStore } from '@/store/wizardStore'
 
 const RESEND_SECONDS = 30
@@ -16,6 +16,8 @@ export function StepOtp() {
   const setOtpVerified = useWizardStore((state) => state.setOtpVerified)
   const setStep = useWizardStore((state) => state.setStep)
   const [otp, setOtp] = useState('')
+  const [otpError, setOtpError] = useState<string | null>(null)
+  const [otpShake, setOtpShake] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [resending, setResending] = useState(false)
   const [cooldown, setCooldown] = useState(RESEND_SECONDS)
@@ -38,13 +40,25 @@ export function StepOtp() {
     return () => window.clearTimeout(timer)
   }, [cooldown])
 
+  const flashOtpError = (message: string) => {
+    setOtpError(message)
+    setOtpShake((value) => value + 1)
+  }
+
   const onVerify = async () => {
     if (submitting) {
       return
     }
 
     if (otp.length !== 6) {
-      toast.error('Please enter all 6 digits')
+      const message = 'Please enter all 6 digits'
+      flashOtpError(message)
+      notify.error(message, {
+        action: {
+          label: 'Try again',
+          onClick: () => setOtpError(null),
+        },
+      })
       return
     }
 
@@ -54,14 +68,34 @@ export function StepOtp() {
       const result = await verifyOtp(otp)
 
       if (!result.ok) {
-        toast.error(result.message)
+        flashOtpError(result.message)
+        notify.error(result.message, {
+          action: {
+            label: 'Try again',
+            onClick: () => {
+              setOtp('')
+              setOtpError(null)
+            },
+          },
+        })
         return
       }
 
+      setOtpError(null)
       setOtpVerified(true)
       goNext()
     } catch {
-      toast.error('Could not verify OTP. Try again.')
+      const message = 'Could not verify OTP. Try again.'
+      flashOtpError(message)
+      notify.error(message, {
+        action: {
+          label: 'Try again',
+          onClick: () => {
+            setOtp('')
+            setOtpError(null)
+          },
+        },
+      })
     } finally {
       setSubmitting(false)
     }
@@ -80,12 +114,25 @@ export function StepOtp() {
       setCooldown(RESEND_SECONDS)
 
       if (result.demoOtp) {
-        toast.message(`New OTP sent. Use ${result.demoOtp}`)
+        notify.info('New OTP sent.', {
+          code: result.demoOtp,
+          onCodeClick: (code) => {
+            setOtp(code)
+            setOtpError(null)
+          },
+        })
       } else {
-        toast.success('A new OTP was sent.')
+        notify.success('A new OTP was sent.')
       }
     } catch {
-      toast.error('Could not resend OTP. Try again.')
+      notify.error('Could not resend OTP. Try again.', {
+        action: {
+          label: 'Retry',
+          onClick: () => {
+            void onResend()
+          },
+        },
+      })
     } finally {
       setResending(false)
     }
@@ -96,7 +143,18 @@ export function StepOtp() {
       <StepHeading>
         Enter your <Accent>OTP</Accent>
       </StepHeading>
-      <OtpInput disabled={submitting} onChange={setOtp} value={otp} />
+      <OtpInput
+        key={otpShake}
+        disabled={submitting}
+        invalid={Boolean(otpError)}
+        onChange={(value) => {
+          setOtp(value)
+          if (otpError) {
+            setOtpError(null)
+          }
+        }}
+        value={otp}
+      />
       <div className="mt-2 flex justify-end">
         <button
           className="font-mono text-[11px] tracking-[0.08em] text-ext-muted uppercase disabled:opacity-50"
@@ -107,7 +165,12 @@ export function StepOtp() {
           {cooldown > 0 ? `Resend OTP in ${cooldown}s` : 'Resend OTP'}
         </button>
       </div>
-      <p className="mt-6 flex items-start gap-2 text-xs text-ext-muted">
+      {otpError ? (
+        <p className="mt-3 text-sm text-[#f29aa8]" role="alert">
+          {otpError}
+        </p>
+      ) : null}
+      <p className="mt-3 flex items-start gap-2 text-xs text-ext-muted">
         <Info className="mt-0.5 size-3.5 shrink-0" />
         <span>A 6-digit OTP has been sent to {email}.</span>
       </p>
