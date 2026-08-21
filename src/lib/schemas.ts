@@ -8,6 +8,19 @@ export const emailSchema = z.object({
     .email('Enter a valid email'),
 })
 
+export const usernameSchema = z.object({
+  username: z
+    .string()
+    .trim()
+    .min(1, 'Username is required')
+    .regex(
+      /^[a-z0-9_]*$/,
+      'Only lowercase letters, numbers, and underscores allowed.',
+    )
+    .min(6, 'Username must be at least 6 characters')
+    .max(20, 'Username must be 20 characters or fewer'),
+})
+
 export const otpSchema = z.object({
   otp: z
     .string()
@@ -44,6 +57,7 @@ export const locationSchema = z.object({
 })
 
 export type EmailValues = z.infer<typeof emailSchema>
+export type UsernameValues = z.infer<typeof usernameSchema>
 export type OtpValues = z.infer<typeof otpSchema>
 export type ProfileValues = z.infer<typeof profileSchema>
 export type LocationValues = z.infer<typeof locationSchema>

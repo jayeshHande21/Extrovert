@@ -18,7 +18,9 @@ export function TextField({
   return (
     <label className="block space-y-2" htmlFor={fieldId}>
       {label ? (
-        <span className="text-sm font-medium text-ext-text">{label}</span>
+        <span className="text-xs font-medium tracking-wide text-ext-muted uppercase">
+          {label}
+        </span>
       ) : null}
       <input
         id={fieldId}

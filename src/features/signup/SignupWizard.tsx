@@ -1,6 +1,7 @@
 import { PlaceholderScreen } from '@/components/PlaceholderScreen'
 import { StepEmail } from '@/features/signup/StepEmail'
 import { StepOtp } from '@/features/signup/StepOtp'
+import { StepUsername } from '@/features/signup/StepUsername'
 import { useWizardStore } from '@/store/wizardStore'
 
 export function SignupWizard() {
@@ -14,10 +15,14 @@ export function SignupWizard() {
     return <StepOtp />
   }
 
+  if (step === 3) {
+    return <StepUsername />
+  }
+
   return (
     <PlaceholderScreen
-      description="Username — implementation next."
-      title="Username"
+      description="Display name — implementation next."
+      title="Name"
     />
   )
 }

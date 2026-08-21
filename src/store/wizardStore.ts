@@ -1,12 +1,13 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-export type WizardStep = 1 | 2 | 3 | 4
+export type WizardStep = 1 | 2 | 3 | 4 | 5 | 6 | 7
 
 export type Pronouns = '' | 'he/him' | 'she/her' | 'they/them' | 'other'
 
 export type WizardFields = {
   email: string
+  username: string
   name: string
   age: string
   pronouns: Pronouns
@@ -29,6 +30,7 @@ type WizardStore = WizardFields & {
 
 const initialFields: WizardFields = {
   email: '',
+  username: '',
   name: '',
   age: '',
   pronouns: '',
@@ -49,7 +51,7 @@ export const useWizardStore = create<WizardStore>()(
       },
       goNext: () => {
         const { step } = get()
-        if (step < 4) {
+        if (step < 7) {
           set({ step: ((step + 1) as WizardStep) })
         }
       },
