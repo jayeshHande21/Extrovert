@@ -28,12 +28,17 @@ export const otpSchema = z.object({
     .regex(/^\d{6}$/, 'Enter the 6-digit code'),
 })
 
-export const profileSchema = z.object({
+export const nameSchema = z.object({
   name: z
     .string()
     .trim()
     .min(1, 'Name is required')
+    .min(2, 'Name must be at least 2 characters')
     .max(40, 'Name must be 40 characters or fewer'),
+})
+
+export const profileSchema = z.object({
+  name: nameSchema.shape.name,
   age: z
     .string()
     .trim()
@@ -58,6 +63,7 @@ export const locationSchema = z.object({
 
 export type EmailValues = z.infer<typeof emailSchema>
 export type UsernameValues = z.infer<typeof usernameSchema>
+export type NameValues = z.infer<typeof nameSchema>
 export type OtpValues = z.infer<typeof otpSchema>
 export type ProfileValues = z.infer<typeof profileSchema>
 export type LocationValues = z.infer<typeof locationSchema>

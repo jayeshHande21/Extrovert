@@ -10,6 +10,7 @@ export type WizardFields = {
   username: string
   name: string
   age: string
+  dateOfBirth: string
   pronouns: Pronouns
   phone: string
   state: string
@@ -33,6 +34,7 @@ const initialFields: WizardFields = {
   username: '',
   name: '',
   age: '',
+  dateOfBirth: '',
   pronouns: '',
   phone: '',
   state: '',
