@@ -10,6 +10,7 @@ export type WizardFields = {
   age: string
   dateOfBirth: string
   pronouns: string
+  inviteCode: string
   phone: string
   state: string
   city: string
@@ -34,6 +35,7 @@ const initialFields: WizardFields = {
   age: '',
   dateOfBirth: '',
   pronouns: '',
+  inviteCode: '',
   phone: '',
   state: '',
   city: '',

@@ -21,12 +21,20 @@ export async function verifyOtp(code: string) {
   return { ok: true as const }
 }
 
-export async function completeProfile() {
+const VALID_INVITES = ['PARTY30', 'EXTRO']
+
+export async function completeProfile(inviteCode = '') {
   await delay(800)
+
+  const code = inviteCode.trim().toUpperCase()
+
+  if (code && !VALID_INVITES.includes(code)) {
+    return { ok: false as const, message: 'Invite code not found' }
+  }
 
   if (Math.random() < 0.2) {
     return { ok: false as const, message: 'Something went wrong. Please try again.' }
   }
 
-  return { ok: true as const }
+  return { ok: true as const, bonusHvts: code ? 30 : 0 }
 }

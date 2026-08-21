@@ -1,6 +1,6 @@
-import { PlaceholderScreen } from '@/components/PlaceholderScreen'
 import { StepAge } from '@/features/signup/StepAge'
 import { StepEmail } from '@/features/signup/StepEmail'
+import { StepInvite } from '@/features/signup/StepInvite'
 import { StepName } from '@/features/signup/StepName'
 import { StepOtp } from '@/features/signup/StepOtp'
 import { StepPronouns } from '@/features/signup/StepPronouns'
@@ -34,10 +34,5 @@ export function SignupWizard() {
     return <StepPronouns />
   }
 
-  return (
-    <PlaceholderScreen
-      description="Optional invite code, then sign up — implementation next."
-      title="Invite"
-    />
-  )
+  return <StepInvite />
 }

@@ -55,6 +55,16 @@ export const profileSchema = z.object({
     .or(z.literal('')),
 })
 
+export const inviteSchema = z.object({
+  inviteCode: z
+    .string()
+    .trim()
+    .refine(
+      (value) => value === '' || /^[a-zA-Z0-9]{4,12}$/.test(value),
+      'Invite codes are 4–12 letters or numbers',
+    ),
+})
+
 export const locationSchema = z.object({
   state: z.string().min(1, 'Select a state'),
   city: z.string().min(1, 'Select a city'),
@@ -66,4 +76,5 @@ export type UsernameValues = z.infer<typeof usernameSchema>
 export type NameValues = z.infer<typeof nameSchema>
 export type OtpValues = z.infer<typeof otpSchema>
 export type ProfileValues = z.infer<typeof profileSchema>
+export type InviteValues = z.infer<typeof inviteSchema>
 export type LocationValues = z.infer<typeof locationSchema>
