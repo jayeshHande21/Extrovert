@@ -44,28 +44,92 @@ body {
     linear-gradient(180deg, #2f7a8c 0%, #000 72%);
 }
 
-@keyframes logo-dot-bounce {
-  0%,
+@keyframes logo-dot-roll-bounce {
+  0% {
+    transform: translate(0.22em, 0.04em) rotate(0deg) scale(1);
+  }
+  16% {
+    transform: translate(0.12em, 0em) rotate(140deg) scale(1);
+  }
+  22% {
+    transform: translate(0.08em, 0.04em) rotate(200deg) scale(1.08, 0.88);
+  }
+  42% {
+    transform: translate(0.02em, 0) rotate(320deg) scale(1);
+  }
+  50% {
+    transform: translate(0, 0) rotate(360deg) scale(1.22, 0.74);
+  }
+  64% {
+    transform: translate(0, -0.12em) rotate(360deg) scale(0.9, 1.16);
+  }
+  76% {
+    transform: translate(0, 0.01em) rotate(360deg) scale(1.12, 0.84);
+  }
+  86% {
+    transform: translate(0, -0.05em) rotate(360deg) scale(0.96, 1.06);
+  }
   100% {
-    transform: translateY(0) scale(1);
+    transform: translate(0, 0) rotate(360deg) scale(1);
   }
-  35% {
-    transform: translateY(-0.22em) scale(1.05);
+}
+
+@keyframes logo-dot-bounce {
+  0% {
+    transform: translateY(0) scale(1, 1);
   }
-  55% {
-    transform: translateY(0.04em) scale(1.12, 0.82);
+  10% {
+    transform: translateY(0.06em) scale(1.35, 0.62);
   }
-  70% {
-    transform: translateY(-0.08em) scale(1);
+  28% {
+    transform: translateY(-0.48em) scale(0.82, 1.38);
+  }
+  42% {
+    transform: translateY(0.05em) scale(1.28, 0.7);
+  }
+  56% {
+    transform: translateY(-0.24em) scale(0.9, 1.2);
+  }
+  68% {
+    transform: translateY(0.03em) scale(1.16, 0.82);
+  }
+  80% {
+    transform: translateY(-0.1em) scale(0.96, 1.08);
+  }
+  90% {
+    transform: translateY(0.015em) scale(1.08, 0.9);
+  }
+  100% {
+    transform: translateY(0) scale(1, 1);
   }
 }
 
 .logo-dot {
-  transform-origin: center bottom;
+  transform-origin: center center;
+  will-change: transform;
+  background: radial-gradient(circle at 32% 30%, #fff 0%, #f3f3f3 36%, #c8c8c8 100%);
+}
+
+.logo-dot-accent {
+  background: radial-gradient(
+    circle at 32% 30%,
+    #efe8ff 0%,
+    var(--ext-accent) 42%,
+    #6d4cc7 100%
+  );
+}
+
+.logo-dot-wait {
+  transform: translate(0.22em, 0.04em);
 }
 
 .logo-dot-active {
-  animation: logo-dot-bounce 0.7s cubic-bezier(0.34, 1.4, 0.64, 1);
+  animation: logo-dot-roll-bounce 1.15s cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.logo-dot-bounce-only {
+  transform-origin: center bottom;
+  animation: logo-dot-bounce 1.05s cubic-bezier(0.22, 0.9, 0.32, 1);
 }
 
 @keyframes logo-dot-pulse {
@@ -86,8 +150,13 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .logo-dot-active,
-  .logo-dot-pulse {
+  .logo-dot-pulse,
+  .logo-dot-bounce-only {
     animation: none;
+  }
+
+  .logo-dot-wait {
+    transform: none;
   }
 }
 

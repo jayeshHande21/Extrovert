@@ -7,48 +7,83 @@ const sizes = {
   lg: 'text-7xl sm:text-8xl lg:text-[9rem]',
 } as const
 
+type LogoMotion = 'wait' | 'run' | 'idle' | 'bounce'
+
 type LogoProps = {
   size?: keyof typeof sizes
   className?: string
   pulse?: boolean
+  loop?: boolean
+  roll?: boolean
 }
 
-export function Logo({ size = 'md', className, pulse = false }: LogoProps) {
-  const [bouncing, setBouncing] = useState(false)
+export function Logo({
+  size = 'md',
+  className,
+  pulse = false,
+  loop = false,
+  roll = true,
+}: LogoProps) {
+  const [motion, setMotion] = useState<LogoMotion>(pulse || !roll ? 'idle' : 'wait')
 
-  const bounce = () => {
-    setBouncing(false)
+  const playRoll = () => {
+    setMotion('wait')
     requestAnimationFrame(() => {
-      setBouncing(true)
+      setMotion('run')
     })
   }
 
+  const playBounce = () => {
+    setMotion('idle')
+    requestAnimationFrame(() => {
+      setMotion('bounce')
+    })
+  }
+
+  const play = roll ? playRoll : playBounce
+
   useEffect(() => {
-    const timer = window.setTimeout(bounce, 250)
+    if (pulse) {
+      return
+    }
+
+    const timer = window.setTimeout(play, 160)
     return () => window.clearTimeout(timer)
-  }, [])
+  }, [pulse, roll])
+
+  useEffect(() => {
+    if (!loop || motion !== 'idle') {
+      return
+    }
+
+    const timer = window.setTimeout(play, 2200)
+    return () => window.clearTimeout(timer)
+  }, [loop, motion, roll])
 
   return (
     <button
       aria-label="Extroverts"
-        className={cn(
-          'relative inline-block cursor-pointer bg-transparent p-0 font-serif font-bold leading-none text-ext-text',
-          pulse && 'font-editorial',
-          sizes[size],
-          className,
-        )}
-      onClick={bounce}
-      onMouseEnter={bounce}
+      className={cn(
+        'relative inline-block w-fit shrink-0 self-start overflow-visible bg-transparent p-0 font-serif font-bold leading-none text-ext-text',
+        pulse && 'font-editorial',
+        sizes[size],
+        className,
+      )}
+      onClick={pulse || !roll ? playBounce : playRoll}
+      onMouseEnter={pulse || !roll ? playBounce : playRoll}
       type="button"
     >
       E
       <span
         className={cn(
-          'logo-dot absolute top-[0.18em] -right-[0.22em] size-[0.18em] rounded-full',
-          pulse ? 'bg-ext-accent' : 'bg-white',
-          bouncing ? 'logo-dot-active' : pulse && 'logo-dot-pulse',
+          'logo-dot absolute top-[0.05em] left-[0.7em] size-[0.14em] rounded-full',
+          pulse && 'logo-dot-accent',
+          motion === 'wait' && 'logo-dot-wait',
+          motion === 'run' && 'logo-dot-active',
+          motion === 'bounce' && 'logo-dot-bounce-only',
+          motion === 'idle' && pulse && 'logo-dot-pulse',
         )}
-        onAnimationEnd={() => setBouncing(false)}
+        onAnimationEnd={() => setMotion('idle')}
       />
     </button>
   )
