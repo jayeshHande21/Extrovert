@@ -3,6 +3,7 @@ import { StepAge } from '@/features/signup/StepAge'
 import { StepEmail } from '@/features/signup/StepEmail'
 import { StepName } from '@/features/signup/StepName'
 import { StepOtp } from '@/features/signup/StepOtp'
+import { StepPronouns } from '@/features/signup/StepPronouns'
 import { StepUsername } from '@/features/signup/StepUsername'
 import { useWizardStore } from '@/store/wizardStore'
 
@@ -29,10 +30,14 @@ export function SignupWizard() {
     return <StepAge />
   }
 
+  if (step === 6) {
+    return <StepPronouns />
+  }
+
   return (
     <PlaceholderScreen
-      description="Pronouns — implementation next."
-      title="Pronouns"
+      description="Optional invite code, then sign up — implementation next."
+      title="Invite"
     />
   )
 }

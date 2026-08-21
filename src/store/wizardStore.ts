@@ -3,15 +3,13 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 
 export type WizardStep = 1 | 2 | 3 | 4 | 5 | 6 | 7
 
-export type Pronouns = '' | 'he/him' | 'she/her' | 'they/them' | 'other'
-
 export type WizardFields = {
   email: string
   username: string
   name: string
   age: string
   dateOfBirth: string
-  pronouns: Pronouns
+  pronouns: string
   phone: string
   state: string
   city: string
