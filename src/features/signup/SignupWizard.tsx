@@ -1,10 +1,18 @@
 import { PlaceholderScreen } from '@/components/PlaceholderScreen'
+import { StepEmail } from '@/features/signup/StepEmail'
+import { useWizardStore } from '@/store/wizardStore'
 
 export function SignupWizard() {
+  const step = useWizardStore((state) => state.step)
+
+  if (step === 1) {
+    return <StepEmail />
+  }
+
   return (
     <PlaceholderScreen
-      description="4-step wizard: email, OTP, profile, location — implementation next."
-      title="Signup"
+      description="OTP verification — implementation next."
+      title="OTP"
     />
   )
 }

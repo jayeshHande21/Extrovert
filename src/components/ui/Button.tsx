@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes } from 'react'
 import { cn } from '@/lib/cn'
+import { Spinner } from '@/components/ui/Spinner'
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   loading?: boolean
@@ -27,7 +28,17 @@ export function Button({
       type={type}
       {...props}
     >
-      {children}
+      {loading ? (
+        <Spinner
+          className={
+            variant === 'primary'
+              ? 'border-black/20 border-t-black'
+              : 'border-white/30 border-t-white'
+          }
+        />
+      ) : (
+        children
+      )}
     </button>
   )
 }
