@@ -3,7 +3,7 @@ import { GettingReadyHeader } from '@/components/signup/GettingReadyHeader'
 
 export function SignupShell({ children }: { children: ReactNode }) {
   return (
-    <main className="relative min-h-dvh overflow-x-hidden bg-ext-bg font-display text-ext-text">
+    <main className="relative min-h-dvh overflow-x-hidden bg-ext-bg font-sans text-ext-text">
       <div className="pointer-events-none absolute inset-0 hidden lg:block">
         <div className="absolute -top-24 left-0 h-[420px] w-[420px] rounded-full bg-ext-accent/20 blur-3xl" />
         <div className="absolute right-0 bottom-0 h-[280px] w-[280px] rounded-full bg-cyan-400/10 blur-3xl" />
