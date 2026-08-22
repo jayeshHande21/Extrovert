@@ -39,17 +39,17 @@ export function StepInvite() {
 
   useEffect(() => {
     if (!otpVerified) {
-      setStep(2)
+      setStep(1)
       return
     }
 
     if (!pronouns) {
-      setStep(4)
+      setStep(3)
       return
     }
 
     if (!state || !city || !college) {
-      setStep(5)
+      setStep(4)
     }
   }, [otpVerified, pronouns, state, city, college, setStep])
 

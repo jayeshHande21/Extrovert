@@ -45,12 +45,12 @@ export function StepLocation() {
 
   useEffect(() => {
     if (!otpVerified) {
-      setStep(2)
+      setStep(1)
       return
     }
 
     if (!pronouns || !age) {
-      setStep(4)
+      setStep(3)
     }
   }, [otpVerified, pronouns, age, setStep])
 

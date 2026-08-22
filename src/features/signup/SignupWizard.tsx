@@ -3,7 +3,6 @@ import { StepAge } from '@/features/signup/StepAge'
 import { StepEmail } from '@/features/signup/StepEmail'
 import { StepInvite } from '@/features/signup/StepInvite'
 import { StepLocation } from '@/features/signup/StepLocation'
-import { StepOtp } from '@/features/signup/StepOtp'
 import { StepProfile } from '@/features/signup/StepProfile'
 import { SignupShell } from '@/components/signup/SignupShell'
 import { useWizardStore } from '@/store/wizardStore'
@@ -14,18 +13,14 @@ function StepView({ step }: { step: number }) {
   }
 
   if (step === 2) {
-    return <StepOtp />
-  }
-
-  if (step === 3) {
     return <StepProfile />
   }
 
-  if (step === 4) {
+  if (step === 3) {
     return <StepAge />
   }
 
-  if (step === 5) {
+  if (step === 4) {
     return <StepLocation />
   }
 

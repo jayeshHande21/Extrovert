@@ -48,7 +48,7 @@ export function StepProfile() {
 
   useEffect(() => {
     if (!otpVerified) {
-      setStep(2)
+      setStep(1)
     }
   }, [otpVerified, setStep])
 

@@ -28,12 +28,12 @@ export function StepAge() {
 
   useEffect(() => {
     if (!otpVerified) {
-      setStep(2)
+      setStep(1)
       return
     }
 
     if (!name || phone.length !== 10) {
-      setStep(3)
+      setStep(2)
     }
   }, [otpVerified, name, phone, setStep])
 
