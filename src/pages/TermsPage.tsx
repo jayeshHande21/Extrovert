@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Logo } from '@/components/brand/Logo'
+import { TermsCheck } from '@/components/terms/TermsCheck'
 import { TermsSheet } from '@/components/terms/TermsSheet'
 import { Button } from '@/components/ui/Button'
 
 export function TermsPage() {
   const navigate = useNavigate()
   const [sheetOpen, setSheetOpen] = useState(false)
+  const [accepted, setAccepted] = useState(false)
 
   return (
     <main className="relative min-h-dvh overflow-hidden bg-black">
@@ -32,30 +34,40 @@ export function TermsPage() {
           </p>
 
           <div className="mt-auto pt-10 lg:mt-8 lg:max-w-sm lg:pt-0">
-            <p className="mb-3 text-center text-sm text-ext-muted lg:text-left">
-              To proceed, accept{' '}
-              <button
-                className="text-white underline underline-offset-2"
-                onClick={() => setSheetOpen(true)}
-                type="button"
+            <div className="mb-4">
+              <TermsCheck
+                checked={accepted}
+                onToggle={() => setAccepted((value) => !value)}
               >
-                Terms and Conditions
-              </button>
-            </p>
-            <Button onClick={() => setSheetOpen(true)}>Accept</Button>
+                To proceed, accept{' '}
+                <button
+                  className="text-white underline underline-offset-2"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setSheetOpen(true)
+                  }}
+                  type="button"
+                >
+                  Terms and Conditions
+                </button>
+              </TermsCheck>
+            </div>
+            <Button disabled={!accepted} onClick={() => navigate('/signup')}>
+              Accept
+            </Button>
           </div>
         </div>
       </div>
 
       <TermsSheet
+        accepted={accepted}
         open={sheetOpen}
         onAccept={() => {
           setSheetOpen(false)
-          navigate('/signup')
         }}
         onClose={() => setSheetOpen(false)}
+        onToggle={() => setAccepted((value) => !value)}
       />
     </main>
   )
 }
-

@@ -2,15 +2,24 @@ import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { termsSections } from '@/data/terms'
+import { TermsCheck } from '@/components/terms/TermsCheck'
 import { Button } from '@/components/ui/Button'
 
 type TermsSheetProps = {
   open: boolean
+  accepted: boolean
   onClose: () => void
   onAccept: () => void
+  onToggle: () => void
 }
 
-export function TermsSheet({ open, onClose, onAccept }: TermsSheetProps) {
+export function TermsSheet({
+  open,
+  accepted,
+  onClose,
+  onAccept,
+  onToggle,
+}: TermsSheetProps) {
   useEffect(() => {
     if (!open) {
       return
@@ -92,7 +101,16 @@ export function TermsSheet({ open, onClose, onAccept }: TermsSheetProps) {
             </div>
 
             <div className="mt-5 shrink-0 border-t border-white/10 pt-4 sm:mt-6">
-              <Button className="sm:mx-auto sm:max-w-xs" onClick={onAccept}>
+              <div className="mb-4">
+                <TermsCheck checked={accepted} onToggle={onToggle}>
+                  I have read and agree to these terms.
+                </TermsCheck>
+              </div>
+              <Button
+                className="sm:mx-auto sm:max-w-xs"
+                disabled={!accepted}
+                onClick={onAccept}
+              >
                 I understand
               </Button>
               <p className="mt-3 text-center text-[11px] text-ext-muted">
