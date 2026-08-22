@@ -2,7 +2,7 @@ import { Logo } from '@/components/brand/Logo'
 import { cn } from '@/lib/cn'
 import { useWizardStore } from '@/store/wizardStore'
 
-const TOTAL_STEPS = 7
+const TOTAL_STEPS = 8
 
 export function GettingReadyHeader() {
   const step = useWizardStore((state) => state.step)
@@ -21,7 +21,7 @@ export function GettingReadyHeader() {
           return (
             <span
               className={cn(
-                'size-[9px] rounded-full border-[1.5px] border-ext-border transition-all duration-[400ms] ease-[cubic-bezier(0.34,1.56,0.64,1)]',
+                'size-[7px] rounded-full border-[1.5px] border-ext-border transition-all duration-[400ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] sm:size-[9px]',
                 punch < step &&
                   'border-ext-accent bg-ext-accent shadow-[0_0_0_3px_var(--ext-accent-dim)]',
                 punch === step && 'scale-[1.3] border-ext-text',

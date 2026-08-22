@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { getCities, getColleges, getState } from '@/data/locations'
 
 export const emailSchema = z.object({
   email: z
@@ -65,11 +66,37 @@ export const inviteSchema = z.object({
     ),
 })
 
-export const locationSchema = z.object({
-  state: z.string().min(1, 'Select a state'),
-  city: z.string().min(1, 'Select a city'),
-  college: z.string().min(1, 'Select a college'),
-})
+export const locationSchema = z
+  .object({
+    state: z.string().min(1, 'Select a state'),
+    city: z.string().min(1, 'Select a city'),
+    college: z.string().min(1, 'Select a college'),
+  })
+  .superRefine((value, ctx) => {
+    if (value.state && !getState(value.state)) {
+      ctx.addIssue({ code: 'custom', path: ['state'], message: 'Select a state' })
+    }
+
+    if (
+      value.city &&
+      !getCities(value.state).some((city) => city.id === value.city)
+    ) {
+      ctx.addIssue({ code: 'custom', path: ['city'], message: 'Select a city' })
+    }
+
+    if (
+      value.college &&
+      !getColleges(value.state, value.city).some(
+        (college) => college.id === value.college,
+      )
+    ) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['college'],
+        message: 'Select a college',
+      })
+    }
+  })
 
 export type EmailValues = z.infer<typeof emailSchema>
 export type UsernameValues = z.infer<typeof usernameSchema>

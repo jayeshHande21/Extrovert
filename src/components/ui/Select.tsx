@@ -1,4 +1,5 @@
 import type { SelectHTMLAttributes } from 'react'
+import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/cn'
 
 type SelectOption = {
@@ -20,30 +21,54 @@ export function Select({
   options,
   placeholder = 'Select',
   className,
+  disabled,
   ...props
 }: SelectProps) {
   const fieldId = id ?? props.name
+  const errorId = error && fieldId ? `${fieldId}-error` : undefined
 
   return (
-    <label className="block space-y-2" htmlFor={fieldId}>
-      <span className="text-sm font-medium text-ext-text">{label}</span>
+    <div className="relative">
       <select
+        {...props}
         id={fieldId}
+        aria-describedby={errorId}
+        aria-invalid={Boolean(error) || undefined}
         className={cn(
-          'h-12 w-full rounded-[12px] border border-ext-border bg-ext-surface px-4 text-sm text-ext-text outline-none focus:border-ext-accent',
-          error && 'border-ext-danger',
+          'peer h-14 w-full appearance-none rounded-[10px] border border-ext-border bg-transparent px-[18px] pt-[18px] pr-10 pb-2 text-[17px] text-ext-text outline-none transition-colors focus:border-ext-accent disabled:cursor-not-allowed disabled:opacity-40',
+          error && 'border-ext-danger focus:border-ext-danger',
           className,
         )}
-        {...props}
+        disabled={disabled}
       >
-        <option value="">{placeholder}</option>
+        <option className="bg-ext-surface text-ext-muted" value="">
+          {placeholder}
+        </option>
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            className="bg-ext-surface text-ext-text"
+            key={option.value}
+            value={option.value}
+          >
             {option.label}
           </option>
         ))}
       </select>
-      {error ? <span className="text-xs text-ext-danger">{error}</span> : null}
-    </label>
+      <label
+        className="pointer-events-none absolute top-[9px] left-[18px] font-mono text-[10px] tracking-[0.12em] text-ext-muted uppercase peer-focus:text-ext-accent"
+        htmlFor={fieldId}
+      >
+        {label}
+      </label>
+      <ChevronDown
+        aria-hidden
+        className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-ext-muted"
+      />
+      {error ? (
+        <span className="mt-2 block text-xs text-ext-danger" id={errorId} role="alert">
+          {error}
+        </span>
+      ) : null}
+    </div>
   )
 }

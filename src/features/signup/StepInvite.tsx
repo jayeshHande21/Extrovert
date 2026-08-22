@@ -15,6 +15,9 @@ import { useWizardStore } from '@/store/wizardStore'
 export function StepInvite() {
   const inviteCode = useWizardStore((state) => state.inviteCode)
   const pronouns = useWizardStore((state) => state.pronouns)
+  const state = useWizardStore((store) => store.state)
+  const city = useWizardStore((store) => store.city)
+  const college = useWizardStore((store) => store.college)
   const otpVerified = useWizardStore((state) => state.otpVerified)
   const goBack = useWizardStore((state) => state.goBack)
   const setFields = useWizardStore((state) => state.setFields)
@@ -42,8 +45,13 @@ export function StepInvite() {
 
     if (!pronouns) {
       setStep(6)
+      return
     }
-  }, [otpVerified, pronouns, setStep])
+
+    if (!state || !city || !college) {
+      setStep(7)
+    }
+  }, [otpVerified, pronouns, state, city, college, setStep])
 
   const onSubmit = handleSubmit(async (values) => {
     if (submitting) {

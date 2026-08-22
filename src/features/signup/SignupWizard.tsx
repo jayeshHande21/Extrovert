@@ -4,6 +4,7 @@ import { StepEmail } from '@/features/signup/StepEmail'
 import { StepInvite } from '@/features/signup/StepInvite'
 import { StepName } from '@/features/signup/StepName'
 import { StepOtp } from '@/features/signup/StepOtp'
+import { StepLocation } from '@/features/signup/StepLocation'
 import { StepPronouns } from '@/features/signup/StepPronouns'
 import { StepUsername } from '@/features/signup/StepUsername'
 import { SignupShell } from '@/components/signup/SignupShell'
@@ -32,6 +33,10 @@ function StepView({ step }: { step: number }) {
 
   if (step === 6) {
     return <StepPronouns />
+  }
+
+  if (step === 7) {
+    return <StepLocation />
   }
 
   return <StepInvite />
