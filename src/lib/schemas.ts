@@ -36,6 +36,10 @@ export const nameSchema = z.object({
     .min(1, 'Name is required')
     .min(2, 'Name must be at least 2 characters')
     .max(40, 'Name must be 40 characters or fewer'),
+  phone: z
+    .string()
+    .trim()
+    .regex(/^\d{10}$/, 'Enter a 10-digit phone number'),
 })
 
 export const profileSchema = z.object({
@@ -48,12 +52,7 @@ export const profileSchema = z.object({
   pronouns: z.enum(['he/him', 'she/her', 'they/them', 'other'], {
     error: 'Select your pronouns',
   }),
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\d{10}$/, 'Enter a 10-digit phone number')
-    .optional()
-    .or(z.literal('')),
+  phone: nameSchema.shape.phone,
 })
 
 export const inviteSchema = z.object({

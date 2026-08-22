@@ -15,6 +15,7 @@ export function StepAge() {
   const age = useWizardStore((state) => state.age)
   const dateOfBirth = useWizardStore((state) => state.dateOfBirth)
   const name = useWizardStore((state) => state.name)
+  const phone = useWizardStore((state) => state.phone)
   const otpVerified = useWizardStore((state) => state.otpVerified)
   const goBack = useWizardStore((state) => state.goBack)
   const goNext = useWizardStore((state) => state.goNext)
@@ -28,10 +29,10 @@ export function StepAge() {
       return
     }
 
-    if (!name) {
+    if (!name || phone.length !== 10) {
       setStep(4)
     }
-  }, [otpVerified, name, setStep])
+  }, [otpVerified, name, phone, setStep])
 
   const onConfirm = (parts: DobParts) => {
     setFields({

@@ -12,8 +12,11 @@ import { TextField } from '@/components/ui/TextField'
 import { nameSchema, type NameValues } from '@/lib/schemas'
 import { useWizardStore } from '@/store/wizardStore'
 
+const digitsOnly = (value: string) => value.replace(/\D/g, '').slice(0, 10)
+
 export function StepName() {
   const name = useWizardStore((state) => state.name)
+  const phone = useWizardStore((state) => state.phone)
   const username = useWizardStore((state) => state.username)
   const otpVerified = useWizardStore((state) => state.otpVerified)
   const goBack = useWizardStore((state) => state.goBack)
@@ -29,7 +32,7 @@ export function StepName() {
   } = useForm<NameValues>({
     resolver: zodResolver(nameSchema),
     mode: 'onChange',
-    defaultValues: { name: name ?? '' },
+    defaultValues: { name: name ?? '', phone: phone ?? '' },
   })
 
   useEffect(() => {
@@ -43,10 +46,12 @@ export function StepName() {
     }
   }, [otpVerified, username, setStep])
 
-  const currentValue = watch('name')
+  const currentName = watch('name')
+  const currentPhone = watch('phone')
+  const phoneField = register('phone')
 
   const onSubmit = handleSubmit((values) => {
-    setFields({ name: values.name })
+    setFields({ name: values.name, phone: values.phone })
     goNext()
   })
 
@@ -55,18 +60,35 @@ export function StepName() {
       <StepHeading>
         Name, please, for the <Accent>party check</Accent>!
       </StepHeading>
-      <TextField
-        autoComplete="name"
-        error={errors.name?.message}
-        label="Name"
-        maxLength={40}
-        {...register('name')}
-      />
+      <div className="flex flex-col gap-4">
+        <TextField
+          autoComplete="name"
+          error={errors.name?.message}
+          label="Name"
+          maxLength={40}
+          {...register('name')}
+        />
+        <TextField
+          autoComplete="tel"
+          error={errors.phone?.message}
+          inputMode="numeric"
+          label="Phone"
+          maxLength={10}
+          {...phoneField}
+          onChange={(event) => {
+            event.target.value = digitsOnly(event.target.value)
+            void phoneField.onChange(event)
+          }}
+        />
+      </div>
       <StepHint>
         This is the name shown on members and requests. Cannot be changed later.
       </StepHint>
       <StepActions>
-        <Button disabled={!isValid || !currentValue?.trim()} type="submit">
+        <Button
+          disabled={!isValid || !currentName?.trim() || currentPhone?.length !== 10}
+          type="submit"
+        >
           Next
         </Button>
         <Button onClick={goBack} type="button" variant="ghost">
