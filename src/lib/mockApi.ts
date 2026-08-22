@@ -21,6 +21,20 @@ export async function verifyOtp(code: string) {
   return { ok: true as const }
 }
 
+const TAKEN_USERNAMES = ['extroverts', 'administrator']
+
+export async function checkUsername(username: string) {
+  await delay(800)
+
+  const value = username.trim().toLowerCase()
+
+  if (TAKEN_USERNAMES.includes(value)) {
+    return { ok: false as const, message: 'That username is taken. Try another.' }
+  }
+
+  return { ok: true as const }
+}
+
 const VALID_INVITES = ['PARTY30', 'EXTRO']
 
 export async function completeProfile(inviteCode = '') {
