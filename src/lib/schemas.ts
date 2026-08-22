@@ -42,16 +42,9 @@ export const nameSchema = z.object({
     .regex(/^\d{10}$/, 'Enter a 10-digit phone number'),
 })
 
-export const profileSchema = z.object({
+export const identitySchema = z.object({
+  username: usernameSchema.shape.username,
   name: nameSchema.shape.name,
-  age: z
-    .string()
-    .trim()
-    .regex(/^\d{1,3}$/, 'Enter your age in years')
-    .refine((value) => Number(value) >= 18, 'You must be 18 or older'),
-  pronouns: z.enum(['he/him', 'she/her', 'they/them', 'other'], {
-    error: 'Select your pronouns',
-  }),
   phone: nameSchema.shape.phone,
 })
 
@@ -100,7 +93,7 @@ export const locationSchema = z
 export type EmailValues = z.infer<typeof emailSchema>
 export type UsernameValues = z.infer<typeof usernameSchema>
 export type NameValues = z.infer<typeof nameSchema>
+export type IdentityValues = z.infer<typeof identitySchema>
 export type OtpValues = z.infer<typeof otpSchema>
-export type ProfileValues = z.infer<typeof profileSchema>
 export type InviteValues = z.infer<typeof inviteSchema>
 export type LocationValues = z.infer<typeof locationSchema>

@@ -44,12 +44,12 @@ export function StepInvite() {
     }
 
     if (!pronouns) {
-      setStep(6)
+      setStep(4)
       return
     }
 
     if (!state || !city || !college) {
-      setStep(7)
+      setStep(5)
     }
   }, [otpVerified, pronouns, state, city, college, setStep])
 

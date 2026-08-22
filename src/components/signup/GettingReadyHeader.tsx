@@ -2,7 +2,7 @@ import { Logo } from '@/components/brand/Logo'
 import { cn } from '@/lib/cn'
 import { useWizardStore } from '@/store/wizardStore'
 
-const TOTAL_STEPS = 8
+const TOTAL_STEPS = 6
 
 export function GettingReadyHeader() {
   const step = useWizardStore((state) => state.step)

@@ -23,6 +23,7 @@ export function StepLocation() {
   const city = useWizardStore((store) => store.city)
   const college = useWizardStore((store) => store.college)
   const pronouns = useWizardStore((store) => store.pronouns)
+  const age = useWizardStore((store) => store.age)
   const otpVerified = useWizardStore((store) => store.otpVerified)
   const goBack = useWizardStore((store) => store.goBack)
   const goNext = useWizardStore((store) => store.goNext)
@@ -48,10 +49,10 @@ export function StepLocation() {
       return
     }
 
-    if (!pronouns) {
-      setStep(6)
+    if (!pronouns || !age) {
+      setStep(4)
     }
-  }, [otpVerified, pronouns, setStep])
+  }, [otpVerified, pronouns, age, setStep])
 
   const selectedState = watch('state')
   const selectedCity = watch('city')

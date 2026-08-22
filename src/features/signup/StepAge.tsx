@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { DobSheet } from '@/components/signup/DobSheet'
+import { PronounsSheet } from '@/components/signup/PronounsSheet'
 import {
   Accent,
   StepActions,
@@ -14,6 +15,7 @@ import { useWizardStore } from '@/store/wizardStore'
 export function StepAge() {
   const age = useWizardStore((state) => state.age)
   const dateOfBirth = useWizardStore((state) => state.dateOfBirth)
+  const pronouns = useWizardStore((state) => state.pronouns)
   const name = useWizardStore((state) => state.name)
   const phone = useWizardStore((state) => state.phone)
   const otpVerified = useWizardStore((state) => state.otpVerified)
@@ -21,7 +23,8 @@ export function StepAge() {
   const goNext = useWizardStore((state) => state.goNext)
   const setFields = useWizardStore((state) => state.setFields)
   const setStep = useWizardStore((state) => state.setStep)
-  const [sheetOpen, setSheetOpen] = useState(false)
+  const [dobOpen, setDobOpen] = useState(false)
+  const [pronounsOpen, setPronounsOpen] = useState(false)
 
   useEffect(() => {
     if (!otpVerified) {
@@ -30,51 +33,71 @@ export function StepAge() {
     }
 
     if (!name || phone.length !== 10) {
-      setStep(4)
+      setStep(3)
     }
   }, [otpVerified, name, phone, setStep])
 
-  const onConfirm = (parts: DobParts) => {
+  const onConfirmDob = (parts: DobParts) => {
     setFields({
       dateOfBirth: formatDob(parts),
       age: String(getAge(parts)),
     })
-    setSheetOpen(false)
+    setDobOpen(false)
   }
-
-  const openSheet = () => setSheetOpen(true)
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <StepHeading>
-        How many years have you been <Accent>partying</Accent>?
+        A little more about <Accent>you</Accent>
       </StepHeading>
-      <div
-        className="cursor-pointer"
-        onClick={openSheet}
-        onKeyDown={(event) => {
-          if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault()
-            openSheet()
-          }
-        }}
-        role="button"
-        tabIndex={0}
-      >
-        <TextField
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div
           className="cursor-pointer"
-          label="Age"
-          readOnly
-          tabIndex={-1}
-          value={age}
-        />
+          onClick={() => setDobOpen(true)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              setDobOpen(true)
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <TextField
+            className="cursor-pointer"
+            label="Age"
+            readOnly
+            tabIndex={-1}
+            value={age}
+          />
+        </div>
+        <div
+          className="cursor-pointer"
+          onClick={() => setPronounsOpen(true)}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault()
+              setPronounsOpen(true)
+            }
+          }}
+          role="button"
+          tabIndex={0}
+        >
+          <TextField
+            className="cursor-pointer"
+            label="Pronouns"
+            readOnly
+            tabIndex={-1}
+            value={pronouns}
+          />
+        </div>
       </div>
       <StepHint>
-        We need your age to verify you&apos;re eligible and help others know who
-        they&apos;re connecting with.
+        We need your age to verify you&apos;re 18+, and pronouns so others know
+        how to address you.
       </StepHint>
       <StepActions>
-        <Button disabled={!age} onClick={goNext}>
+        <Button disabled={!age || !pronouns} onClick={goNext}>
           Next
         </Button>
         <Button onClick={goBack} variant="ghost">
@@ -84,9 +107,18 @@ export function StepAge() {
 
       <DobSheet
         initialValue={dateOfBirth}
-        open={sheetOpen}
-        onClose={() => setSheetOpen(false)}
-        onConfirm={onConfirm}
+        open={dobOpen}
+        onClose={() => setDobOpen(false)}
+        onConfirm={onConfirmDob}
+      />
+      <PronounsSheet
+        initialValue={pronouns}
+        open={pronounsOpen}
+        onClose={() => setPronounsOpen(false)}
+        onConfirm={(value) => {
+          setFields({ pronouns: value })
+          setPronounsOpen(false)
+        }}
       />
     </div>
   )

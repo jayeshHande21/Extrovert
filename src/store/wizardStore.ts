@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
-export type WizardStep = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
+export type WizardStep = 1 | 2 | 3 | 4 | 5 | 6
 
 export type WizardFields = {
   email: string
@@ -53,7 +53,7 @@ export const useWizardStore = create<WizardStore>()(
       },
       goNext: () => {
         const { step } = get()
-        if (step < 8) {
+        if (step < 6) {
           set({ step: ((step + 1) as WizardStep) })
         }
       },
@@ -79,7 +79,26 @@ export const useWizardStore = create<WizardStore>()(
     }),
     {
       name: 'extroverts-wizard',
+      version: 2,
       storage: createJSONStorage(() => sessionStorage),
+      migrate: (persisted) => {
+        const state = persisted as { step?: number }
+        const mapped: Record<number, WizardStep> = {
+          1: 1,
+          2: 2,
+          3: 3,
+          4: 3,
+          5: 4,
+          6: 4,
+          7: 5,
+          8: 6,
+        }
+
+        return {
+          ...state,
+          step: mapped[state.step ?? 1] ?? 1,
+        }
+      },
     },
   ),
 )

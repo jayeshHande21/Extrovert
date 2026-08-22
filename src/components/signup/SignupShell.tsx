@@ -41,7 +41,7 @@ export function StepHint({ children }: { children: ReactNode }) {
 
 export function StepActions({ children }: { children: ReactNode }) {
   return (
-    <div className="mt-auto flex w-full flex-col gap-3 pt-10 sm:max-w-md lg:mt-10 lg:max-w-sm">
+    <div className="mt-auto flex w-full flex-col gap-3 pt-10 lg:mt-10">
       {children}
     </div>
   )

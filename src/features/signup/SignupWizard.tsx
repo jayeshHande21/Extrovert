@@ -2,11 +2,9 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { StepAge } from '@/features/signup/StepAge'
 import { StepEmail } from '@/features/signup/StepEmail'
 import { StepInvite } from '@/features/signup/StepInvite'
-import { StepName } from '@/features/signup/StepName'
-import { StepOtp } from '@/features/signup/StepOtp'
 import { StepLocation } from '@/features/signup/StepLocation'
-import { StepPronouns } from '@/features/signup/StepPronouns'
-import { StepUsername } from '@/features/signup/StepUsername'
+import { StepOtp } from '@/features/signup/StepOtp'
+import { StepProfile } from '@/features/signup/StepProfile'
 import { SignupShell } from '@/components/signup/SignupShell'
 import { useWizardStore } from '@/store/wizardStore'
 
@@ -20,22 +18,14 @@ function StepView({ step }: { step: number }) {
   }
 
   if (step === 3) {
-    return <StepUsername />
+    return <StepProfile />
   }
 
   if (step === 4) {
-    return <StepName />
-  }
-
-  if (step === 5) {
     return <StepAge />
   }
 
-  if (step === 6) {
-    return <StepPronouns />
-  }
-
-  if (step === 7) {
+  if (step === 5) {
     return <StepLocation />
   }
 
