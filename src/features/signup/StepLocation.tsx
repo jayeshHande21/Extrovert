@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import {
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/Button'
 import { Select } from '@/components/ui/Select'
 import { getCities, getColleges, locations } from '@/data/locations'
 import { locationSchema, type LocationValues } from '@/lib/schemas'
+import { simulateSubmit } from '@/lib/mockApi'
 import { useWizardStore } from '@/store/wizardStore'
 
 const stateOptions = locations.map((state) => ({
@@ -29,6 +30,7 @@ export function StepLocation() {
   const goNext = useWizardStore((store) => store.goNext)
   const setFields = useWizardStore((store) => store.setFields)
   const setStep = useWizardStore((store) => store.setStep)
+  const [submitting, setSubmitting] = useState(false)
 
   const {
     register,
@@ -69,9 +71,20 @@ export function StepLocation() {
   const stateField = register('state')
   const cityField = register('city')
 
-  const onSubmit = handleSubmit((values) => {
-    setFields(values)
-    goNext()
+  const onSubmit = handleSubmit(async (values) => {
+    if (submitting) {
+      return
+    }
+
+    setSubmitting(true)
+
+    try {
+      await simulateSubmit()
+      setFields(values)
+      goNext()
+    } finally {
+      setSubmitting(false)
+    }
   })
 
   return (
@@ -121,11 +134,12 @@ export function StepLocation() {
       <StepActions>
         <Button
           disabled={!selectedState || !selectedCity || !selectedCollege}
+          loading={submitting}
           type="submit"
         >
           Next
         </Button>
-        <Button onClick={goBack} type="button" variant="ghost">
+        <Button disabled={submitting} onClick={goBack} type="button" variant="ghost">
           Back
         </Button>
       </StepActions>

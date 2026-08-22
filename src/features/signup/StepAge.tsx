@@ -10,6 +10,7 @@ import {
 import { Button } from '@/components/ui/Button'
 import { TextField } from '@/components/ui/TextField'
 import { formatDob, getAge, type DobParts } from '@/lib/dateOfBirth'
+import { simulateSubmit } from '@/lib/mockApi'
 import { useWizardStore } from '@/store/wizardStore'
 
 export function StepAge() {
@@ -25,6 +26,7 @@ export function StepAge() {
   const setStep = useWizardStore((state) => state.setStep)
   const [dobOpen, setDobOpen] = useState(false)
   const [pronounsOpen, setPronounsOpen] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
     if (!otpVerified) {
@@ -43,6 +45,21 @@ export function StepAge() {
       age: String(getAge(parts)),
     })
     setDobOpen(false)
+  }
+
+  const onNext = async () => {
+    if (submitting || !age || !pronouns) {
+      return
+    }
+
+    setSubmitting(true)
+
+    try {
+      await simulateSubmit()
+      goNext()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -97,10 +114,14 @@ export function StepAge() {
         how to address you.
       </StepHint>
       <StepActions>
-        <Button disabled={!age || !pronouns} onClick={goNext}>
+        <Button
+          disabled={!age || !pronouns}
+          loading={submitting}
+          onClick={onNext}
+        >
           Next
         </Button>
-        <Button onClick={goBack} variant="ghost">
+        <Button disabled={submitting} onClick={goBack} variant="ghost">
           Back
         </Button>
       </StepActions>

@@ -1,6 +1,10 @@
 const DEMO_OTP = '123456'
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
+export async function simulateSubmit() {
+  await delay(800)
+}
+
 export async function sendOtp(email: string) {
   await delay(800)
 
