@@ -51,7 +51,7 @@ export function SignupWizard() {
       <AnimatePresence mode="wait">
         <motion.div
           animate={{ opacity: 1, x: 0 }}
-          className="flex min-h-0 flex-1 flex-col"
+          className="flex min-h-0 w-full flex-1 flex-col"
           exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -28 }}
           initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 28 }}
           key={step}
