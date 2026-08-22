@@ -11,7 +11,7 @@ export function SignupShell({ children }: { children: ReactNode }) {
 
       <div className="relative mx-auto flex min-h-dvh w-full max-w-lg flex-col px-6 py-10 sm:max-w-xl sm:px-10 sm:py-12 md:max-w-2xl md:px-12 lg:max-w-6xl lg:flex-row lg:items-center lg:gap-16 lg:px-12 lg:py-16">
         <GettingReadyHeader />
-        <div className="mt-12 flex min-h-0 flex-1 flex-col sm:mt-14 lg:mt-0 lg:max-w-xl lg:flex-none lg:self-center">
+        <div className="mt-12 flex min-h-0 w-full flex-1 flex-col sm:mt-14 lg:mt-0 lg:max-w-xl lg:flex-none lg:self-center">
           {children}
         </div>
       </div>

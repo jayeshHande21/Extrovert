@@ -193,7 +193,7 @@ export function StepEmail() {
 
   return (
     <form
-      className="flex min-h-0 flex-1 flex-col"
+      className="flex min-h-0 w-full flex-1 flex-col"
       noValidate
       onSubmit={(event) => {
         event.preventDefault()
@@ -218,7 +218,7 @@ export function StepEmail() {
         {...register('email')}
       />
       {otpSent ? (
-        <div className="mt-6">
+        <div className="mt-6 w-full">
           <OtpInput
             key={otpShake}
             disabled={submitting}

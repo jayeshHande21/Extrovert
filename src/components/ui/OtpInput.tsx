@@ -12,6 +12,7 @@ export function OtpInput({ value, onChange, disabled, invalid }: OtpInputProps) 
   return (
     <OTPInput
       autoComplete="one-time-code"
+      className="w-full"
       containerClassName={cn(
         'flex w-full justify-between gap-2 sm:gap-3',
         invalid && 'otp-shake',
@@ -25,7 +26,7 @@ export function OtpInput({ value, onChange, disabled, invalid }: OtpInputProps) 
         <>
           {slots.map((slot, index) => (
             <div
-              className="flex w-9 flex-col items-center sm:w-11"
+              className="flex min-w-0 flex-1 flex-col items-center"
               key={index}
             >
               <span
