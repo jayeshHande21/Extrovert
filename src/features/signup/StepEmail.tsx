@@ -72,17 +72,9 @@ export function StepEmail() {
       setOtpSent(true)
       setCooldown(RESEND_SECONDS)
 
-      if (result.demoOtp) {
-        notify.info('OTP sent. Use this code to continue.', {
-          code: result.demoOtp,
-          onCodeClick: (code) => {
-            setOtp(code)
-            setOtpError(null)
-          },
-        })
-      } else {
-        notify.success('OTP sent to your email.')
-      }
+      notify.success('OTP sent to your email.', {
+        code: result.demoOtp,
+      })
     } catch {
       notify.error('Could not send OTP. Try again.')
     } finally {
@@ -158,17 +150,9 @@ export function StepEmail() {
       setOtp('')
       setCooldown(RESEND_SECONDS)
 
-      if (result.demoOtp) {
-        notify.info('New OTP sent.', {
-          code: result.demoOtp,
-          onCodeClick: (code) => {
-            setOtp(code)
-            setOtpError(null)
-          },
-        })
-      } else {
-        notify.success('A new OTP was sent.')
-      }
+      notify.success('OTP sent to your email.', {
+        code: result.demoOtp,
+      })
     } catch {
       notify.error('Could not resend OTP. Try again.', {
         action: {

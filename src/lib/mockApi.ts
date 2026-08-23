@@ -11,7 +11,7 @@ export async function sendOtp(email: string) {
   return {
     ok: true as const,
     email,
-    ...(import.meta.env.DEV ? { demoOtp: DEMO_OTP } : {}),
+    demoOtp: DEMO_OTP,
   }
 }
 
